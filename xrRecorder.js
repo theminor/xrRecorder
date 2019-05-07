@@ -2,8 +2,6 @@
 const fs = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
-const path = require('path');
-const settings = require('./settings.json');
 
 /**
  * Log a message, optionally as an error
@@ -36,12 +34,17 @@ function wsSend(ws, dta) {
 
 /**
  * Handle incoming data on the given websocket
+ * @param {Object} [ws] - the websocket to send response messages on
  * @param {String} [msg] - the websocket message in the form: {"cmd": "command", "data": "data", "oldTitle": "Old Title", ...}
  */
-async function wsMsg(msgString) {
-	const msg = JSON.parse(msg);
-
-	
+async function wsMsg(ws, msgString) {
+	if (msgString === 'startRecording') {
+		// *** TO DO
+	} else if (msgString === 'stopRecording') {
+		// *** TO DO
+	} else if (msgString === 'getStatus') {
+		// *** TO DO
+	}
 }
 
 /**
@@ -66,7 +69,7 @@ fs.readFile('./page.html', (err, pageTemplate) => {
 						return ws.terminate();
 					}
 					ws.isAlive = true;
-					ws.on('message', msg => wsMsg(msg));
+					ws.on('message', msg => wsMsg(ws, msg));
 					ws.on('pong', () => ws.isAlive = true);
 					ws.pingTimer = setInterval(() => {
 						if (ws.isAlive === false) return closeWs(ws);
