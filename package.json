@@ -1,0 +1,27 @@
+{
+	"name": "xrRecorder",
+	"version": "0.0.0",
+	"description": "Simple custom web interface to control my recording setup for my xr18",
+	"main": "xrRecorder.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/theminor/xrRecorder.git"
+	},
+	"keywords": [
+		"xr18",
+		"multitrack",
+		"recorder"
+	],
+	"dependencies": {
+		"ws": "^5.2.0"
+	},
+	"author": "theminor",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/theminor/xrRecorder/issues"
+	},
+	"homepage": "https://github.com/theminor/xrRecorder#readme"
+}
