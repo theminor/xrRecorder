@@ -18,10 +18,10 @@
 			font-family: "Courier New", Courier, monospace;
 			font-size: 20px;
 		}
-    #statusTable {
-      font-size: 14px;
-      padding-bottom: 20px;
-    }
+		#statusTable {
+		  font-size: 14px;
+		  padding-bottom: 20px;
+		}
 		button {
 			background-color: ForestGreen;
 			color: white;
@@ -29,6 +29,7 @@
 			height: 70px;
 			width: 130px;
 			border-radius: 35%;
+			margin-bottom: 20px;
 		}
 	.redFont { color: DarkRed; }
 	.greenFont { color: ForestGreen; }
@@ -78,6 +79,7 @@
 		}
 		skt.onopen = getStatus;
 		setInterval(getStatus, 5000);
+		for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; }
 	</script>
 </head>
 <body class="blueFont">
@@ -87,6 +89,7 @@
 		<!-- <table id="statusTable"></table> -->
 		<p id="statusTxt"></p>
 		<button id="startStopBtn" onclick="startStopBtnClick()">Record</button>
+		<label for="numChannels">Channels: </label><select id="numChannels"></select>
 	</div>
 	<h2>Files:</h2>
 	<table id="filesTable"></table>
