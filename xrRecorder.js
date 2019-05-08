@@ -40,10 +40,10 @@ function wsSend(ws, dta) {
  * @param {String} [msg] - the websocket message in the form: {"cmd": "command", "data": "data", "oldTitle": "Old Title", ...}
  */
 function wsMsg(ws, msg) {
-	if (msg === 'startRecording') {
+	if (parseInt(msg)) {   // if a number was sent, that is the number of channels and our instruction to start recording. Note no recording if msg === 0
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error') else {
 			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T',' ');   // cheap trick one-liner to take ISO time and convert to Eastern time zone, output as 2019-05-07 15:23:12
-			proc = spawn('rec', ['-S', '--buffer 262144', '-c 18', '-b 24', filePath + fName], {env: {'AUDIODEV':'hw:X18XR18,0'}});   // *** TO DO: review command line options; see https://dikant.de/2018/02/28/raspberry-xr18-recorder/
+			proc = spawn('rec', ['-S', '--buffer 262144', `-c ${parseInt(msg)}`, '-b 24', filePath + fName], {env: {'AUDIODEV':'hw:X18XR18,0'}});
 			proc.recStatus = '';
 			proc.stderr.on('data', dta => proc.recStatus += dta);
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err)); }
