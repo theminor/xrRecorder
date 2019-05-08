@@ -56,7 +56,10 @@ function wsMsg(ws, msg) {
 			if (err) logMsg(err);
 			wsSend(ws, JSON.stringify({isRecording: proc, files: ls}));
 		});
-	} else logMsg(`Unknown command "${msg}" recieved on websocket`, 'warn')
+	} else {
+		// *** TO DO: any other string will be taken as a file name to attempt to delete
+		logMsg(`Unknown command "${msg}" recieved on websocket`, 'warn');
+	}
 }
 
 /**
