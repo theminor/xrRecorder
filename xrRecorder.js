@@ -12,9 +12,7 @@ const WebSocket = require('ws');
 function logMsg(errOrMsg, level, logStack) {
 	if (!level) level = (typeof errOrMsg === 'string') ? 'info' : 'error';
 	if (typeof errOrMsg === 'string' && level === 'error') errOrMsg = new Error(errOrMsg);
-	let color = '\x1b[32m';  // green
-		if (level === 'error') color = '\x1b[31m';  // red
-		else if (level === 'warn') color = '\x1b[33m';  // yellow
+	let color = level === 'error' ? '\x1b[31m' : (level === 'warn' ? color = '\x1b[33m' : '\x1b[32m');  // '\x1b[33m' = green ; '\x1b[31m' = red ; '\x1b[33m' = yellow
 	const resetColor = '\x1b[0m';
 	console[level]('[' + new Date().toLocaleString() + '] ' + color + (errOrMsg.message || errOrMsg) + resetColor);
 	if (logStack && errOrMsg.stack && (errOrMsg.stack.trim() !== '')) console[level](errOrMsg.stack);
