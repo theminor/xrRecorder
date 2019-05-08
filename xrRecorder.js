@@ -4,6 +4,7 @@ const http = require('http');
 const { spawn } = require('child_process');
 const WebSocket = require('ws');
 
+const filePath = '/recordings';
 let proc = {exitCode: -1};
 
 
@@ -29,7 +30,7 @@ function logMsg(errOrMsg, level, logStack) {
 function wsSend(ws, dta) {
 	if (ws && ws.readyState === WebSocket.OPEN) ws.send(
 		JSON.stringify(dta),
-		err => err ? logMsg(err) : false   // return false if successful; otherwise return error
+		err => err ? logMsg(err) : false
 	) else return logMsg(`Websocket not ready for message "${dta}"`, 'error');
 }
 
@@ -41,7 +42,7 @@ function wsSend(ws, dta) {
 function wsMsg(ws, msg) {
 	if (msg === 'startRecording') {
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error') else {
-			proc = spawn('rec', ['-S', '--buffer 262144', '-c 18', '-b 24', filename], {env: {'AUDIODEV':'hw:X18XR18,0'}});   // *** TO DO: review command line options; see https://dikant.de/2018/02/28/raspberry-xr18-recorder/
+			proc = spawn('rec', ['-S', '--buffer 262144', '-c 18', '-b 24', filePath + '/out.wav'], {env: {'AUDIODEV':'hw:X18XR18,0'}});   // *** TO DO: review command line options; see https://dikant.de/2018/02/28/raspberry-xr18-recorder/
 			proc.recStatus = '';
 			proc.stderr.on('data', dta => proc.recStatus += dta);
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err)); }
@@ -50,7 +51,10 @@ function wsMsg(ws, msg) {
 	} else if (msg === 'stopRecording') {
 		if (proc.kill) proc.kill(); else logMsg('Unable to stop recording: no recording is in progress', 'error');
 	} else if (msg === 'getStatus') {
-		wsSend(ws, JSON.stringify({isRecording: proc, files: []});   // *** TO DO: also send filenames
+		fs.readdir(filePath, function(err, ls) {
+			if (err) logMsg(err);
+			wsSend(ws, JSON.stringify({isRecording: proc, files: ls}));
+		});
 	} else logMsg(`Unknown command "${msg}" recieved on websocket`, 'warn')
 }
 
