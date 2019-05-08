@@ -4,7 +4,7 @@ const http = require('http');
 const { spawn } = require('child_process');
 const WebSocket = require('ws');
 
-const filePath = '/recordings';
+const filePath = '/recordings/';
 let proc = {exitCode: -1};
 
 
@@ -42,7 +42,8 @@ function wsSend(ws, dta) {
 function wsMsg(ws, msg) {
 	if (msg === 'startRecording') {
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error') else {
-			proc = spawn('rec', ['-S', '--buffer 262144', '-c 18', '-b 24', filePath + '/out.wav'], {env: {'AUDIODEV':'hw:X18XR18,0'}});   // *** TO DO: review command line options; see https://dikant.de/2018/02/28/raspberry-xr18-recorder/
+			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T',' ');   // cheap trick one-liner to take ISO time and convert to Eastern time zone, output as 2019-05-07 15:23:12
+			proc = spawn('rec', ['-S', '--buffer 262144', '-c 18', '-b 24', filePath + fName], {env: {'AUDIODEV':'hw:X18XR18,0'}});   // *** TO DO: review command line options; see https://dikant.de/2018/02/28/raspberry-xr18-recorder/
 			proc.recStatus = '';
 			proc.stderr.on('data', dta => proc.recStatus += dta);
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err)); }
