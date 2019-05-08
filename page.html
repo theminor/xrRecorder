@@ -75,7 +75,7 @@
 		}
 		function startStopBtnClick() {
 			if (msg.isRecording) { if (confirm("Stop Recording?")) skt.send("stopRecording"); }
-			else skt.send("startRecording");
+			else skt.send($('numChannels').value);  // to start recording, just send the number of channels to record on
 		}
 		skt.onopen = getStatus;
 		setInterval(getStatus, 5000);
