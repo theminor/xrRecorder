@@ -13,8 +13,7 @@ function logMsg(errOrMsg, level, logStack) {
 	if (!level) level = (typeof errOrMsg === 'string') ? 'info' : 'error';
 	if (typeof errOrMsg === 'string' && level === 'error') errOrMsg = new Error(errOrMsg);
 	let color = level === 'error' ? '\x1b[31m' : (level === 'warn' ? color = '\x1b[33m' : '\x1b[32m');  // '\x1b[33m' = green ; '\x1b[31m' = red ; '\x1b[33m' = yellow
-	const resetColor = '\x1b[0m';
-	console[level]('[' + new Date().toLocaleString() + '] ' + color + (errOrMsg.message || errOrMsg) + resetColor);
+	console[level]('[' + new Date().toLocaleString() + '] ' + color + (errOrMsg.message || errOrMsg) + '\x1b[0m');   // '\x1b[0m' = reset
 	if (logStack && errOrMsg.stack && (errOrMsg.stack.trim() !== '')) console[level](errOrMsg.stack);
 }
 
@@ -57,7 +56,7 @@ fs.readFile('./page.html', (err, pageTemplate) => {
 			response.end(pageTemplate);
 		});
 		server.listen(80, err => {
-			if (err) return 10000;
+			if (err) return logMsg(err);
 			else {
 				const wss = new WebSocket.Server({server});
 				wss.on('connection', ws => {
