@@ -64,7 +64,7 @@ function wsMsg(ws, msg) {
 	} else if (msg === 'getStatus') {
 		fs.readdir(FilePath, function(err, ls) {
 			if (err) logMsg(err);
-			wsSend(ws, JSON.stringify({isRecording: proc, files: ls}));
+			wsSend(ws, JSON.stringify({isRecording: proc.recStatus, files: ls}));
 		});
 	} else {   // any other string will be taken as a file name to attempt to delete
 		fs.unlink(FilePath + msg, err => {
