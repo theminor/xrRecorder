@@ -38,7 +38,7 @@ function wsSend(ws, dta) {
 	if (ws && ws.readyState === WebSocket.OPEN) ws.send(
 		JSON.stringify(dta),
 		err => err ? logMsg(err) : false
-	) else return logMsg(`Websocket not ready for message "${dta}"`, 'error');
+	); else return logMsg(`Websocket not ready for message "${dta}"`, 'error');
 }
 
 /**
