@@ -12,6 +12,9 @@ const Bitrate = 16;   // 24?
 const Encoding = 'signed-integer';
 const SampleRate = 44100;
 
+// *** TO DO:
+//		Add button to shutdown the reasPi
+//		Add link to download files when clicked
 let proc = {exitCode: -1};
 
 
