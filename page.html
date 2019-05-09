@@ -70,7 +70,6 @@
 		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send(fileName); }
 		skt.onopen = getStatus;
 		setInterval(getStatus, 5000);
-		for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; }
 	</script>
 </head>
 <body class="blueFont">
@@ -84,5 +83,6 @@
 	</div>
 	<h2>Files:</h2>
 	<table id="filesTable"></table>
+	<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; }</script>
 </body>
 </html>
