@@ -31,13 +31,12 @@
 			border-radius: 35%;
 			margin-bottom: 20px;
 		}
-	.redFont { color: DarkRed; }
-	.greenFont { color: ForestGreen; }
-	.blueFont { color: DarkBlue; }
+		.redFont { color: DarkRed; }
+		.blueFont { color: DarkBlue; }
 	</style>
 	<script>
 		const skt = new WebSocket(window.location.href.replace('http://', 'ws://').replace('https://', 'wss://'));
-		let msg = {}; // format: { isRecording: 'recording information', files: ['fileName1', 'fileName2'] }
+		let msg = {};
 		function $(sel) { return document.getElementById(sel); }
 		function getStatus() { skt.send('getStatus'); }
 		skt.onmessage = function(event) {
@@ -47,17 +46,8 @@
 			if (msg.isRecording) {
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
-				$('statusTxt').innerText = msg.isRecording;
-					/*
-					// *** TO DO: parse isRecording text? For example:
-					$('statusTable').innerHTML = `<tr><td>Filename:</td><td>${msg.isRecording.fileName}</td></tr>
-																	<tr><td>Channels:</td><td>${msg.isRecording.numChannels}</td></tr>
-																	<tr><td>Time:</td><td>${msg.isRecording.recordTime}</td></tr>
-																	<tr><td>Size:</td><td>${msg.isRecording.fileSize}</td></tr>
-																	<tr id="clipCnt"><td>Clips:</td><td>${msg.isRecording.numClips}</td></tr>`;
-					if (msg.isRecording.numClips > 0) $('clipCnt').className = 'redFont';
-					*/
-				bt.value= 'Stop';
+				$('statusTxt').innerText = msg.isRecording;   // *** TO DO: parse isRecording text and format it nicer
+				bt.value = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
 				st.innerText = '[Stopped]';
