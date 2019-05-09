@@ -4,7 +4,14 @@ const http = require('http');
 const { spawn } = require('child_process');
 const WebSocket = require('ws');
 
-const filePath = '/recordings/';
+// Settings:
+const FilePath = '/recordings/';
+const AudioDevice = 'hw:X18XR18,0';
+const BufferSize = 262144;
+const Bitrate = 16;   // 24?
+const Encoding = 'signed-integer';
+const SampleRate = 44100;
+
 let proc = {exitCode: -1};
 
 
@@ -15,10 +22,10 @@ let proc = {exitCode: -1};
  * @param {boolean} [logStack=false] - if true, the complete call stack will be logged to the console; by default only the message will be logged
  */
 function logMsg(errOrMsg, level, logStack) {
+	const color = { error: '\x1b[31m', warn: '\x1b[33m', log: '\x1b[33m', info: '\x1b[36m', reset: '\x1b[0m' }  // red, yellow, green, cyan, reset
 	if (!level) level = (typeof errOrMsg === 'string') ? 'info' : 'error';
-	if (typeof errOrMsg === 'string' && level === 'error') errOrMsg = new Error(errOrMsg);
-	let color = level === 'error' ? '\x1b[31m' : (level === 'warn' ? color = '\x1b[33m' : '\x1b[32m');  // '\x1b[33m' = green ; '\x1b[31m' = red ; '\x1b[33m' = yellow
-	console[level]('[' + new Date().toLocaleString() + '] ' + color + (errOrMsg.message || errOrMsg) + '\x1b[0m');   // '\x1b[0m' = reset
+	if (typeof errOrMsg === 'string' && level === 'error') errOrMsg = new Error(errOrMsg);	
+	console[level]('[' + new Date().toLocaleString() + '] ' + color[level] + (errOrMsg.message || errOrMsg) + color.reset);   // '\x1b[0m' = reset
 	if (logStack && errOrMsg.stack && (errOrMsg.stack.trim() !== '')) console[level](errOrMsg.stack);
 }
 
@@ -42,26 +49,26 @@ function wsSend(ws, dta) {
 function wsMsg(ws, msg) {
 	if (parseInt(msg)) {   // if a number was sent, that is the number of channels and our instruction to start recording. Note no recording if msg === 0
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error') else {
-			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T',' ');   // cheap trick one-liner to take ISO time and convert to Eastern time zone, output as 2019-05-07 15:23:12
-			proc = spawn('rec', ['-S', '--buffer 262144', `-c ${parseInt(msg)}`, '-b 24', filePath + fName], {env: {'AUDIODEV':'hw:X18XR18,0'}});
+			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T',' ');   // cheap trick one-liner to take ISO time and convert to Eastern time zone and format output as 2019-05-07 15:23:12
+			proc = spawn('rec', ['-S', `--buffer ${BufferSize}`, `-c ${parseInt(msg)}`, `-b ${Bitrate}`, `-e ${Encoding}`, `-r ${SampleRate}`, FilePath + fName + '.wav'], {env: {'AUDIODEV': AudioDevice}});
 			proc.recStatus = '';
 			proc.stderr.on('data', dta => proc.recStatus += dta);
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err)); }
 			proc.on('exit', code => proc.exitCode = code);
 		}
 	} else if (msg === 'stopRecording') {
-		if (proc.kill) proc.kill(); else logMsg('Unable to stop recording: no recording is in progress', 'error');
+		if (proc.kill) proc.kill(); else logMsg('Unable to stop recording: probably no recording is in progress', 'error');
 	} else if (msg === 'getStatus') {
-		fs.readdir(filePath, function(err, ls) {
+		fs.readdir(FilePath, function(err, ls) {
 			if (err) logMsg(err);
 			wsSend(ws, JSON.stringify({isRecording: proc, files: ls}));
 		});
 	} else {   // any other string will be taken as a file name to attempt to delete
-		fs.unlink(filePath + msg, err => {
+		fs.unlink(FilePath + msg, err => {
 			if (err) logMsg(`Unable to delete file "${msg}"`, 'error');
-			wsMsg(ws, 'getStatus');
 		});
 	}
+	if (msg !== 'getStatus') wsMsg(ws, 'getStatus');
 }
 
 /**
