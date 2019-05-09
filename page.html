@@ -59,7 +59,7 @@
 				const tbl = $('filesTable');
 				tbl.innerHTML = '';
 				for (let i = 0; i < msg.files.length; i++) {
-					tbl.innerHTML += `<tr><td>${msg.files[i]}</td><td class="redFont" onclick="delFile(${msg.files[i])">[Delete]</td></tr>`;
+					tbl.innerHTML += `<tr><td>${msg.files[i]}</td><td class="redFont" onclick="delFile(${msg.files[i]})">[Delete]</td></tr>`;
 				}
 			}
 		}
