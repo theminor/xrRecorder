@@ -52,7 +52,16 @@ function wsMsg(ws, msg) {
 			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T',' ');   // cheap trick one-liner to take ISO time and convert to Eastern time zone and format output as 2019-05-07 15:23:12
 			proc = spawn('rec', ['-S', `--buffer ${BufferSize}`, `-c ${parseInt(msg)}`, `-b ${Bitrate}`, `-e ${Encoding}`, `-r ${SampleRate}`, FilePath + fName + '.wav'], {env: {'AUDIODEV': AudioDevice}});
 			proc.recStatus = '';
-			proc.stderr.on('data', dta => {proc.recStatus += dta; console.log(dta);});
+			// proc.stderr.on('data', dta => proc.recStatus += dta);
+
+proc.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+
+proc.stderr.on('data', (data) => {
+  console.log(`stderr: ${data}`);
+});
+			
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); });
 			proc.on('exit', code => proc.exitCode = code);
 		}
