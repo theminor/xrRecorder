@@ -53,7 +53,7 @@ function wsMsg(ws, msg) {
 			proc = spawn('rec', ['-S', `--buffer ${BufferSize}`, `-c ${parseInt(msg)}`, `-b ${Bitrate}`, `-e ${Encoding}`, `-r ${SampleRate}`, FilePath + fName + '.wav'], {env: {'AUDIODEV': AudioDevice}});
 			proc.recStatus = '';
 			proc.stderr.on('data', dta => proc.recStatus += dta);
-			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err)); }
+			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); });
 			proc.on('exit', code => proc.exitCode = code);
 		}
 	} else if (msg === 'stopRecording') {
