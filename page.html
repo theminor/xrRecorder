@@ -43,6 +43,7 @@
 			const st = $('status');
 			const bt = $('startStopBtn');
 			msg = JSON.parse(event.data);
+	console.log(msg);
 			if (msg.isRecording) {
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
