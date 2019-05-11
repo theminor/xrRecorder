@@ -48,12 +48,12 @@
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
 				$('statusTxt').innerText = msg.isRecording;   // *** TO DO: parse isRecording text and format it nicer
-				bt.value = 'Stop';
+				bt.innerHTML = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
 				st.innerText = '[Stopped]';
 				st.className = 'blueFont';
-				bt.value= 'Record';
+				bt.innerHTML = 'Record';
 				bt.style.backgroundColor = 'ForestGreen';
 			}
 			if (msg.files) {
