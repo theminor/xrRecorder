@@ -47,7 +47,14 @@
 			if (msg.isRecording) {
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
-				$('statusTxt').innerText = msg.isRecording;   // *** TO DO: parse isRecording text and format it nicer
+				const txtLines = msg.isRecording.split('\n');
+				let statTxt = '';
+				let lastLine = '';
+				for (i = 0; i < txtLines.length; i++) {
+					if (txtLines[i].startsWith('Input File') || txtLines[i].startsWith('Channels') || txtLines[i].startsWith('Sample Rate') || txtLines[i].startsWith('Precision') || txtLines[i].startsWith('Sample Encoding')) statTxt += txtLines[i] + '\n';
+					else if (txtLines[i].startsWith('In:')) lastLine = txtLines[i];
+				}
+				$('statusTxt').innerText = statTxt + lastLine;   // *** TO DO: parse isRecording text and format it nicer
 				bt.innerHTML = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
