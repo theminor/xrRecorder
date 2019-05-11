@@ -43,13 +43,16 @@
 			const st = $('status');
 			const bt = $('startStopBtn');
 			msg = JSON.parse(event.data);
+console.log(msg);
 			if (msg.isRecording) {
+console.log('***isRec***');
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
 				$('statusTxt').innerText = msg.isRecording;   // *** TO DO: parse isRecording text and format it nicer
 				bt.value = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
+console.log('***not rec***');
 				st.innerText = '[Stopped]';
 				st.className = 'blueFont';
 				bt.value= 'Record';
