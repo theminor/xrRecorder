@@ -48,7 +48,6 @@
 			if (msg.isRecording) {
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
-				
 				/*
 				const txtLines = msg.recStatus.split(/[\r\n]/);
 				let statTxt = '';
@@ -59,9 +58,7 @@
 				}
 				stt.innerText = statTxt + '\n' + lastLine;   // *** TO DO: parse recStatus text and format it nicer
 				*/
-				console.log (msg.recStats, msg.recStatus);
-				stt.innerTxt = msg.recStats + '\n' + msg.recStatus;
-				
+				stt.innerText = msg.recStats + '\n' + msg.recStatus;
 				bt.innerHTML = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
