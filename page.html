@@ -68,8 +68,11 @@
 			else skt.send($('numChannels').value);  // to start recording, just send the number of channels to record on
 		}
 		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send(fileName); }
-		skt.onopen = getStatus;
-		setInterval(getStatus, 5000);
+		skt.onopen = event => {
+			getStatus();
+			skt.statusTimer = setInterval(getStatus, 5000);
+		}
+		skt.onclose = event => clearInterval(skt.statusTimer);
 	</script>
 </head>
 <body class="blueFont">
