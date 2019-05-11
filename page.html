@@ -48,6 +48,8 @@
 			if (msg.isRecording) {
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
+				
+				/*
 				const txtLines = msg.recStatus.split(/[\r\n]/);
 				let statTxt = '';
 				let lastLine = '';
@@ -56,6 +58,9 @@
 					else if (txtLines[i].startsWith('In:')) lastLine = txtLines[i];
 				}
 				stt.innerText = statTxt + '\n' + lastLine;   // *** TO DO: parse recStatus text and format it nicer
+				*/
+				stt.innerTxt = msg.recStatus;
+				
 				bt.innerHTML = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
