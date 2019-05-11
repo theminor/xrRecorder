@@ -56,8 +56,7 @@ function wsMsg(ws, msg) {
 			proc = spawn('rec', ['-S', '--buffer', BufferSize, '-c', msg, '-b', Bitrate, '-e', Encoding, '-r', SampleRate, FilePath + fName + '.wav'], {env: {'AUDIODEV': AudioDevice}});
 			proc.recStatus = '';
 			proc.stderr.on('data', dta => {
-console.log(dta.toString(), JSON.stringify(dta.toString()));
-				if (dta.toString().startsWith('In:')) proc.recStatus = proc.recStatus.substring(0, proc.recStatus.lastIndexOf('\n'));   // \n is console code to remove last line of the string
+				if (dta.toString().startsWith('\rIn:')) proc.recStatus = proc.recStatus.substring(0, proc.recStatus.lastIndexOf('\n'));   // \n is console code to remove last line of the string
 				proc.recStatus += dta;
 			});			
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); });
