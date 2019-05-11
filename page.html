@@ -54,7 +54,7 @@
 					if (txtLines[i].startsWith('Input File') || txtLines[i].startsWith('Channels') || txtLines[i].startsWith('Sample Rate') || txtLines[i].startsWith('Precision') || txtLines[i].startsWith('Sample Encoding')) statTxt += txtLines[i] + '\n';
 					else if (txtLines[i].startsWith('In:')) lastLine = txtLines[i];
 				}
-				$('statusTxt').innerText = statTxt + lastLine;   // *** TO DO: parse isRecording text and format it nicer
+				$('statusTxt').innerText = statTxt + '\n' + lastLine;   // *** TO DO: parse isRecording text and format it nicer
 				bt.innerHTML = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
