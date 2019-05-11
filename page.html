@@ -59,7 +59,7 @@
 				}
 				stt.innerText = statTxt + '\n' + lastLine;   // *** TO DO: parse recStatus text and format it nicer
 				*/
-				stt.innerTxt = msg.recStatus;
+				stt.innerTxt = msg.recStats + '\n' + msg.recStatus;
 				
 				bt.innerHTML = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
