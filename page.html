@@ -47,7 +47,7 @@
 			if (msg.isRecording) {
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
-				const txtLines = msg.isRecording.split('\n');
+				const txtLines = msg.isRecording.split(/[\r\n]/);
 				let statTxt = '';
 				let lastLine = '';
 				for (i = 0; i < txtLines.length; i++) {
