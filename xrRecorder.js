@@ -50,7 +50,7 @@ function wsSend(ws, dta) {
  * @param {String} [msg] - the websocket message in the form: {"cmd": "command", "data": "data", "oldTitle": "Old Title", ...}
  */
 function wsMsg(ws, msg) {
-	if (parseInt(msg)) {   // if a number was sent, that is the number of channels and our instruction to start recording. Note no recording if msg === 0
+	if (Number(msg)) {   // if a number was sent, that is the number of channels and our instruction to start recording. Note no recording if msg === 0
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error'); else {
 			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T',' ');   // cheap trick one-liner to take ISO time and convert to Eastern time zone and format output as 2019-05-07 15:23:12
 			proc = spawn('rec', ['-S', '--buffer', BufferSize, '-c', msg, '-b', Bitrate, '-e', Encoding, '-r', SampleRate, FilePath + fName + '.wav'], {env: {'AUDIODEV': AudioDevice}});
