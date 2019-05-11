@@ -43,6 +43,7 @@
 			const st = $('status');
 			const bt = $('startStopBtn');
 			msg = JSON.parse(event.data);
+			if (typeof msg === 'string') msg = JSON.parse(msg);
 console.log(msg, typeof msg, msg.files);
 			if (msg.isRecording) {
 console.log('***isRec***');
