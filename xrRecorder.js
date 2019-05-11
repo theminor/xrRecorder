@@ -55,9 +55,11 @@ function wsMsg(ws, msg) {
 			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T',' ');   // cheap trick one-liner to take ISO time and convert to Eastern time zone and format output as 2019-05-07 15:23:12
 			proc = spawn('rec', ['-S', '--buffer', BufferSize, '-c', msg, '-b', Bitrate, '-e', Encoding, '-r', SampleRate, FilePath + fName + '.wav'], {env: {'AUDIODEV': AudioDevice}});
 			proc.recStatus = '';
+			proc.recStats = '';
 			proc.stderr.on('data', dta => {
-				if (dta.toString().startsWith('\rIn:')) proc.recStatus = proc.recStatus.substring(0, proc.recStatus.lastIndexOf('\nIn:'));   // \n is console code to remove last line of the string
-				proc.recStatus += dta;
+				let msg = dta.toString();
+				if (msg.startsWith('\rIn:')) proc.recStatus = dta.toString();   // \n is console code to remove last line of the string
+				else proc.recStats += msg;
 			});			
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); });
 			proc.on('exit', code => proc.exitCode = code);
@@ -67,7 +69,7 @@ function wsMsg(ws, msg) {
 	} else if (msg === 'getStatus') {
 		fs.readdir(FilePath, function(err, ls) {
 			if (err) logMsg(err);
-			wsSend(ws, JSON.stringify({isRecording: (typeof proc.exitCode === 'number') ? false : true, files: ls, recStatus: proc.recStatus}));
+			wsSend(ws, JSON.stringify({isRecording: (typeof proc.exitCode === 'number') ? false : true, files: ls, recStats: proc.recStats, recStatus: proc.recStatus}));
 		});
 	} else {   // any other string will be taken as a file name to attempt to delete
 		fs.unlink(FilePath + msg, err => {
