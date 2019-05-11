@@ -61,8 +61,8 @@ function wsMsg(ws, msg) {
 				if (msg.startsWith('\rIn:')) proc.recStatus = dta.toString();   // \n is console code to remove last line of the string
 				else proc.recStats += msg;
 			});			
-			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); });
-			proc.on('exit', code => proc.exitCode = code);
+			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); wsMsg(ws, 'getStatus'); });
+			proc.on('exit', code => { proc.exitCode = code; wsMsg(ws, 'getStatus'); });
 		}
 	} else if (msg === 'stopRecording') {
 		if (proc.kill) proc.kill(); else logMsg('Unable to stop recording: probably no recording is in progress', 'error');
