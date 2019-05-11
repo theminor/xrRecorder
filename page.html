@@ -11,7 +11,7 @@
 			margin: 40px 0px 0px;
 		}
 		div {
-			width: 200px;
+			width: 400px;
 			padding-left: 30px;
 		}
 		#status {
@@ -58,7 +58,7 @@
 				}
 				stt.innerText = statTxt + '\n' + lastLine;   // *** TO DO: parse recStatus text and format it nicer
 				*/
-				stt.innerText = msg.recStats + '\n' + msg.recStatus;
+				stt.innerText = msg.recStats + msg.recStatus;
 				bt.innerHTML = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
