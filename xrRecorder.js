@@ -6,6 +6,7 @@ const WebSocket = require('ws');
 
 // Settings:
 const FilePath = '/recordings/';
+const ServerPort = 3000;
 const AudioDevice = 'hw:X18XR18,0';
 const BufferSize = 262144;
 const Bitrate = 16;   // 24?
@@ -27,7 +28,7 @@ let proc = {exitCode: -1};
 function logMsg(errOrMsg, level, logStack) {
 	const color = { error: '\x1b[31m', warn: '\x1b[33m', log: '\x1b[33m', info: '\x1b[36m', reset: '\x1b[0m' }  // red, yellow, green, cyan, reset
 	if (!level) level = (typeof errOrMsg === 'string') ? 'info' : 'error';
-	if (typeof errOrMsg === 'string' && level === 'error') errOrMsg = new Error(errOrMsg);	
+	if (typeof errOrMsg === 'string' && level === 'error') errOrMsg = new Error(errOrMsg);
 	console[level]('[' + new Date().toLocaleString() + '] ' + color[level] + (errOrMsg.message || errOrMsg) + color.reset);   // '\x1b[0m' = reset
 	if (logStack && errOrMsg.stack && (errOrMsg.stack.trim() !== '')) console[level](errOrMsg.stack);
 }
@@ -60,7 +61,7 @@ function wsMsg(ws, msg) {
 				let msg = dta.toString();
 				if (msg.startsWith('\rIn:')) proc.recStatus = dta.toString();   // \n is console code to remove last line of the string
 				else proc.recStats += msg;
-			});			
+			});
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); wsMsg(ws, 'getStatus'); });
 			proc.on('exit', code => { proc.exitCode = code; wsMsg(ws, 'getStatus'); });
 		}
@@ -90,7 +91,7 @@ fs.readFile('./page.html', (err, pageTemplate) => {
 			response.writeHead(200, {'Content-Type': 'text/html'});
 			response.end(pageTemplate);
 		});
-		server.listen(80, err => {
+		server.listen(ServerPort, err => {
 			if (err) return logMsg(err);
 			else {
 				const wss = new WebSocket.Server({server});
@@ -109,7 +110,7 @@ fs.readFile('./page.html', (err, pageTemplate) => {
 						ws.ping(err => { if (err) return closeWs(ws, err); });
 					}, 10000);
 				});
-				logMsg('Server is listening on port 80');
+				logMsg(`Server is listening on port ${ServerPort}`);
 			}
 		});
 	}
