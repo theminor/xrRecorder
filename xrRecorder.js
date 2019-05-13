@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const http = require('http');
+const path = require('path');
 const { spawn } = require('child_process');
 const WebSocket = require('ws');
 
@@ -15,7 +16,6 @@ const SampleRate = 44100;
 
 // *** TO DO:
 //		Add button to shutdown the reasPi
-//		Add link to download files when clicked
 let proc = {exitCode: -1};
 
 
@@ -88,8 +88,16 @@ fs.readFile('./page.html', (err, pageTemplate) => {
 	else {
 		const server = http.createServer();
 		server.on('request', (request, response) => {
-			response.writeHead(200, {'Content-Type': 'text/html'});
-			response.end(pageTemplate);
+			if (request.url.endsWith('.wav')) {
+				fs.readFile(path.basename(request.url), (wErr, wFile) => {
+					if (wErr) return logMsg(err);
+					response.writeHead(200, {'Content-Type': 'audio/wave'});
+					response.end(wFile);
+				});
+			} else {
+				response.writeHead(200, {'Content-Type': 'text/html'});
+				response.end(pageTemplate);
+			}
 		});
 		server.listen(ServerPort, err => {
 			if (err) return logMsg(err);

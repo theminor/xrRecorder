@@ -49,17 +49,7 @@
 			if (msg.isRecording) {
 				st.innerText = '[Recording]';
 				st.className = 'redFont';
-				/*
-				const txtLines = msg.recStatus.split(/[\r\n]/);
-				let statTxt = '';
-				let lastLine = '';
-				for (i = 0; i < txtLines.length; i++) {
-					if (txtLines[i].startsWith('Input File') || txtLines[i].startsWith('Channels') || txtLines[i].startsWith('Sample Rate') || txtLines[i].startsWith('Precision') || txtLines[i].startsWith('Sample Encoding')) statTxt += txtLines[i] + '\n';
-					else if (txtLines[i].startsWith('In:')) lastLine = txtLines[i];
-				}
-				stt.innerText = statTxt + '\n' + lastLine;   // *** TO DO: parse recStatus text and format it nicer
-				*/
-				stt.innerText = msg.recStats + msg.recStatus;
+				stt.innerText = msg.recStats + msg.recStatus;   // *** TO DO: parse recStatus text and format it nicer
 				bt.innerHTML = 'Stop';
 				bt.style.backgroundColor = 'DarkRed';
 			} else {
@@ -73,7 +63,7 @@
 				const tbl = $('filesTable');
 				tbl.innerHTML = '';
 				for (let i = 0; i < msg.files.length; i++) {
-					tbl.innerHTML += `<tr><td>${msg.files[i]}</td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
+					tbl.innerHTML += `<tr><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
 				}
 			}
 		}
