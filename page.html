@@ -9,6 +9,7 @@
 		h2 {
 			color: DarkSlateGray;
 			margin: 40px 0px 0px;
+			font-size: 20px;
 		}
 		div {
 			width: 400px;
@@ -22,7 +23,7 @@
 			font-size: 14px;
 			padding-bottom: 20px;
 		}
-		button {
+		#startStopBtn {
 			background-color: ForestGreen;
 			color: white;
 			font-size: 20px;
@@ -72,6 +73,8 @@
 			else skt.send($('numChannels').value);  // to start recording, just send the number of channels to record on
 		}
 		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send(fileName); }
+		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('shutdown'); }
+		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('reboot'); }
 		skt.onopen = event => {
 			getStatus();
 			skt.statusTimer = setInterval(getStatus, 5000);
@@ -83,13 +86,19 @@
 	<h1>xr18</h1>
 	<div>
 		<h3 id="status">[Stopped]</h3>
-		<!-- <table id="statusTable"></table> -->
 		<p id="statusTxt"></p>
 		<button id="startStopBtn" onclick="startStopBtnClick()">Record</button>
 		<label for="numChannels">Channels: </label><select id="numChannels"></select>
+		<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; $('numChannels').value = 18; }</script>
 	</div>
 	<h2>Files:</h2>
-	<table id="filesTable"></table>
-	<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; $('numChannels').value = 18; }</script>
+	<div>
+		<table id="filesTable"></table>
+	</div>
+	<h2>System:</h2>
+	<div>
+		<p onclick="shutdownBtnClick()">Shutdown</p>
+		<p onclick="restartBtnClick()">Restart</p>
+	</div>
 </body>
 </html>
