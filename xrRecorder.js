@@ -89,7 +89,7 @@ fs.readFile('./page.html', (err, pageTemplate) => {
 		const server = http.createServer();
 		server.on('request', (request, response) => {
 			if (request.url.endsWith('.wav')) {
-				fs.readFile(path.basename(request.url), (wErr, wFile) => {
+				fs.readFile(FilePath + path.basename(request.url), (wErr, wFile) => {
 					if (wErr) return logMsg(err);
 					response.writeHead(200, {'Content-Type': 'audio/wave'});
 					response.end(wFile);
