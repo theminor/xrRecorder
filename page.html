@@ -64,8 +64,11 @@
 				const tbl = $('filesTable');
 				tbl.innerHTML = '';
 				for (let i = 0; i < msg.files.length; i++) {
-					tbl.innerHTML += `<tr><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
+					tbl.innerHTML += `<tr id="${msg.files[i]}"><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
 				}
+			}
+			if (msg.fileDetail) {
+				$(msg.fileDetail.fileName).title = msg.fileDetail.data;
 			}
 		}
 		function startStopBtnClick() {
