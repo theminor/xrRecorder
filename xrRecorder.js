@@ -71,16 +71,16 @@ function wsMsg(ws, msg) {
 			wsSend(ws, JSON.stringify({isRecording: (typeof proc.exitCode === 'number') ? false : true, files: ls, recStats: proc.recStats, recStatus: proc.recStatus}));
 		});
 	} else if (msg === 'shutdown') {
-		childProcess.exec('sudo /sbin/shutdown -h now', cOut => logMsg(cOut));
+		childProcess.exec('sudo /sbin/shutdown -h now', sErr => sErr ? logMsg(cOut) : null);
 	} else if (msg === 'reboot') {
-		childProcess.exec('sudo /sbin/shutdown -r now', cOut => logMsg(cOut));		
+		childProcess.exec('sudo /sbin/shutdown -r now', sErr => sErr ? logMsg(cOut) : null);		
 	} else if (msg.startsWith('DELETE:')) {
 		fs.unlink(FilePath + msg.substring(7), err => {
 			if (err) logMsg(`Unable to delete file "${msg.substring(7)}"`, 'error');
 		});
 	} else {  // anything else is assumed to be just a file name - get stats on a given file using soxi
-		childProcess.exec('/usr/bin/soxi ' + FilePath + msg, (error, stdout, stderr) => {
-console.log(error, stdout, stderr);
+		childProcess.exec('/usr/bin/soxi ' + FilePath + msg, (sErr, sStOut, sStErr) => {
+console.log(sErr, sStOut, sStErr);
 			//wsSend(ws, JSON.stringify({fileDetail: {fileName: msg, data: cOut}}));
 		});
 	}
