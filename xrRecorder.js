@@ -79,9 +79,9 @@ function wsMsg(ws, msg) {
 			if (err) logMsg(`Unable to delete file "${msg.substring(7)}"`, 'error');
 		});
 	} else {  // anything else is assumed to be just a file name - get stats on a given file using soxi
-		childProcess.exec('/usr/bin/soxi ' + FilePath + msg, cOut => {
-			console.log('/usr/bin/soxi ' + FilePath + msg, cOut);
-			wsSend(ws, JSON.stringify({fileDetail: {fileName: msg, data: cOut}}));
+		childProcess.exec('/usr/bin/soxi ' + FilePath + msg, (error, stdout, stderr) => {
+console.log(error, stdout, stderr);
+			//wsSend(ws, JSON.stringify({fileDetail: {fileName: msg, data: cOut}}));
 		});
 	}
 	if (msg !== 'getStatus') wsMsg(ws, 'getStatus');
