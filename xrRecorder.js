@@ -74,10 +74,12 @@ function wsMsg(ws, msg) {
 		childProcess.exec('sudo /sbin/shutdown -h now', msg => logMsg(msg));
 	} else if (msg === 'reboot') {
 		childProcess.exec('sudo /sbin/shutdown -r now', msg => logMsg(msg));		
-	} else {   // any other string will be taken as a file name to attempt to delete
-		fs.unlink(FilePath + msg, err => {
-			if (err) logMsg(`Unable to delete file "${msg}"`, 'error');
+	} else if (msg.startsWith('DELETE:')) {
+		fs.unlink(FilePath + msg.substring(7), err => {
+			if (err) logMsg(`Unable to delete file "${msg.substring(7)}"`, 'error');
 		});
+	} else {
+		// *** TO DO - get more file information
 	}
 	if (msg !== 'getStatus') wsMsg(ws, 'getStatus');
 }
