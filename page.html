@@ -100,6 +100,13 @@
 		<button id="startStopBtn" onclick="startStopBtnClick()">Record</button>
 		<label for="numChannels">Channels: </label><select id="numChannels"></select>
 		<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; $('numChannels').value = 18; }</script>
+		<label for="audioDevice">Audio Device: </label>
+		<select id="audioDevice">
+			<option>X Air XR18 Digital Mixer</option>
+			<option>UMC404HD Audio Interface</option>
+			<option>QX1222USB Analog Mixer</option>
+			<!-- *** TO DO *** -->
+		</select>
 	</div>
 	<h2>Files:</h2>
 	<div>
