@@ -14,8 +14,7 @@ const Bitrate = 16;   // 24?
 const Encoding = 'signed-integer';
 const SampleRate = 44100;
 
-// *** TO DO:
-//		Add button to shutdown the reasPi
+// Globals:
 let proc = {exitCode: -1};
 
 
@@ -72,7 +71,6 @@ function wsMsg(ws, msg) {
 			if (err) logMsg(err);
 			wsSend(ws, JSON.stringify({isRecording: (typeof proc.exitCode === 'number') ? false : true, files: ls, recStats: proc.recStats, recStatus: proc.recStatus}));
 		});
-	}
 	} else if (msg === 'shutdown') {
 		childProcess.exec('sudo /sbin/shutdown -h now', msg => logMsg(msg));
 	} else if (msg === 'reboot') {
