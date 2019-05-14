@@ -30,7 +30,7 @@ function logMsg(errOrMsg, level, logStack) {
 	const color = { error: '\x1b[31m', warn: '\x1b[33m', log: '\x1b[33m', info: '\x1b[36m', reset: '\x1b[0m' }  // red, yellow, green, cyan, reset
 	if (!level) level = (typeof errOrMsg === 'string') ? 'info' : 'error';
 	if (typeof errOrMsg === 'string' && level === 'error') errOrMsg = new Error(errOrMsg);
-	console[level]('[' + new Date().toLocaleString() + '] ' + color[level] + (errOrMsg.message || errOrMsg) + color.reset);   // '\x1b[0m' = reset
+	console[level]('[' + new Date().toLocaleString() + '] ' + color[level] + errOrMsg.toString() + color.reset);   // '\x1b[0m' = reset
 	if (logStack && errOrMsg.stack && (errOrMsg.stack.trim() !== '')) console[level](errOrMsg.stack);
 }
 
