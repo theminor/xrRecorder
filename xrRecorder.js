@@ -80,7 +80,7 @@ function wsMsg(ws, msg) {
 		});
 	} else {  // anything else is assumed to be just a file name - get stats on a given file using soxi
 		childProcess.exec('/usr/bin/soxi ' + FilePath + msg, (sErr, sStOut, sStErr) => {
-console.log(sErr, sStOut, sStErr);
+console.log(sStOut);
 			//wsSend(ws, JSON.stringify({fileDetail: {fileName: msg, data: cOut}}));
 		});
 	}
