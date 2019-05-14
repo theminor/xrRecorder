@@ -13,7 +13,7 @@ const AudioDevice = 'hw:X18XR18,0';
 //const RecOptions = ['--buffer', '262144', '-b', '24'];
 // const RecOptions = ['--buffer', '262144', '-b', '16', '-e', 'signed-integer', '-r', '44100']
 // AUDIODEV="hw:X18XR18" sox "|rec -b 32 -p" -b 24 -c 18 test.wav
-const RecCmd = (channels, fName) => `AUDIODEV="hw:X18XR18" sox "|rec -b 32 --buffer 262144 -p" -b 24 -c {$channels} ${fName}`;
+const RecCmd = (channels, fName) => `AUDIODEV="hw:X18XR18" sox "|rec -b 32 --buffer 262144 -p" -b 24 -c ${channels} ${fName}`;
 
 // Globals:
 let proc = {exitCode: -1};
