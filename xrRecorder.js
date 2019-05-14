@@ -7,7 +7,7 @@ const WebSocket = require('ws');
 
 // Settings:
 const FilePath = '/recordings/';
-const ServerPort = 3000;
+const ServerPort = 80;
 const AudioDevice = 'hw:X18XR18,0';
 const Bitrate = 24;
 const SampleRate = 48000;
