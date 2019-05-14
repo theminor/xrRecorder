@@ -67,7 +67,7 @@
 				tbl.innerHTML = '';
 				for (let i = 0; i < msg.files.length; i++) {
 					tbl.innerHTML += `<tr><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td id="${msg.files[i]}" onclick="getDetails('${msg.files[i]}')"></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
-					$(msg.files[i]).innerHTML = '<pre>' + ((fileDetails[msg.files[i]]) || '[load detail]') + '</pre> ;					
+					$(msg.files[i]).innerHTML = '<pre>' + ( fileDetails[msg.files[i]] || '[load detail]' ) + '</pre>';					
 				}
 			}
 			if (msg.fileDetail) {
