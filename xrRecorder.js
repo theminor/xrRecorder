@@ -81,7 +81,7 @@ function wsMsg(ws, msg) {
 	} else {  // anything else is assumed to be just a file name - get stats on a given file using soxi
 		childProcess.exec('/usr/bin/soxi ' + FilePath + msg, cOut => {
 			console.log('/usr/bin/soxi ' + FilePath + msg, cOut);
-			wsSend(ws, JSON.stringify({fileDetail: {fileName: msg, data: cOut}});
+			wsSend(ws, JSON.stringify({fileDetail: {fileName: msg, data: cOut}}));
 		});
 	}
 	if (msg !== 'getStatus') wsMsg(ws, 'getStatus');
