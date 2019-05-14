@@ -91,6 +91,7 @@ function wsMsg(ws, msg) {
 						}
 		);
 		*/
+	}
 	if (msg !== 'getStatus') wsMsg(ws, 'getStatus');
 }
 
