@@ -9,7 +9,7 @@ const WebSocket = require('ws');
 const FilePath = '/recordings/';
 const ServerPort = 3000;
 const AudioDevice = 'hw:X18XR18,0';
-const RecOptions = ['--buffer', '262144', '-b', '32'];
+const RecOptions = ['--buffer', '262144', '-b', '24'];
 // const RecOptions = ['--buffer', '262144', '-b', '16', '-e', 'signed-integer', '-r', '44100']
 
 // Globals:
@@ -51,7 +51,7 @@ function wsMsg(ws, msg) {
 	if (Number(msg)) {   // if a number was sent, that is the number of channels and our instruction to start recording. Note no recording if msg === 0
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error'); else {
 			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T','_');   // cheap trick one-liner to take ISO time and convert to Eastern time zone and format output as 2019-05-07_15:23:12
-			proc = childProcess.spawn('rec', (['-S'].concat(RecOptions)).concat([FilePath + fName + '.wav']), {env: {'AUDIODEV': AudioDevice}});
+			proc = childProcess.spawn('rec', (['-S', '-c', msg].concat(RecOptions)).concat([FilePath + fName + '.wav']), {env: {'AUDIODEV': AudioDevice}});
 			proc.recStatus = '';
 			proc.recStats = '';
 			proc.stderr.on('data', dta => {
