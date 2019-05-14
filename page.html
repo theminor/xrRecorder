@@ -67,7 +67,7 @@
 				tbl.innerHTML = '';
 				for (let i = 0; i < msg.files.length; i++) {
 					tbl.innerHTML += `<tr><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td id="${msg.files[i]}" onclick="getDetails('${msg.files[i]}')"></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
-					$(msg.files[i]).innerHTML = (fileDetails[msg.files[i]]) || '[load detail]';					
+					$(msg.files[i]).innerHTML = '<pre>' + ((fileDetails[msg.files[i]]) || '[load detail]') + '</pre> ;					
 				}
 			}
 			if (msg.fileDetail) {
@@ -93,8 +93,8 @@
 <body class="blueFont">
 	<h1>xr18</h1>
 	<div>
-		<h3 id="status">[Stopped]</h3>
-		<p id="statusTxt"></p>
+		<h3><pre id="status">[Stopped]</pre></h3>
+		<pre id="statusTxt"></pre>
 		<button id="startStopBtn" onclick="startStopBtnClick()">Record</button>
 		<label for="numChannels">Channels: </label><select id="numChannels"></select>
 		<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; $('numChannels').value = 18; }</script>
