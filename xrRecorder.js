@@ -9,12 +9,8 @@ const WebSocket = require('ws');
 const FilePath = '/recordings/';
 const ServerPort = 3000;
 const AudioDevice = 'hw:X18XR18,0';
-// const BufferSize = 262144;
-// const Bitrate = 16;   // 24?
-// const Encoding = 'signed-integer';
-// const SampleRate = 44100;
-const RecOptions = ['--buffer', '262144', '-b', '16', '-e', 'signed-integer', '-r', '44100']
-// ['-S', '--buffer', BufferSize, '-c', msg, '-b', Bitrate, '-e', Encoding, '-r', SampleRate, FilePath + fName + '.wav'], {env: {'AUDIODEV': AudioDevice}
+const RecOptions = [];
+// const RecOptions = ['--buffer', '262144', '-b', '16', '-e', 'signed-integer', '-r', '44100']
 
 // Globals:
 let proc = {exitCode: -1};
