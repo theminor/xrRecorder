@@ -64,7 +64,7 @@
 				const tbl = $('filesTable');
 				tbl.innerHTML = '';
 				for (let i = 0; i < msg.files.length; i++) {
-					tbl.innerHTML += `<tr id="${msg.files[i]}"><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
+					tbl.innerHTML += `<tr id="${msg.files[i]} onmouseover="getDetails('${msg.files[i]'})"><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
 				}
 			}
 			if (msg.fileDetail) {
@@ -78,6 +78,7 @@
 		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send('DELETE:' + fileName); }
 		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('shutdown'); }
 		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('reboot'); }
+		function getDetails(fileName) { skt.send(fileName); }
 		skt.onopen = event => {
 			getStatus();
 			skt.statusTimer = setInterval(getStatus, 5000);
