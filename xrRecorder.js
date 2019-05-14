@@ -9,7 +9,7 @@ const WebSocket = require('ws');
 const FilePath = '/recordings/';
 const ServerPort = 3000;
 const AudioDevice = 'hw:X18XR18,0';
-const RecOptions = ['-b', '32'];
+const RecOptions = ['--buffer', '262144', '-b', '32'];
 // const RecOptions = ['--buffer', '262144', '-b', '16', '-e', 'signed-integer', '-r', '44100']
 
 // Globals:
@@ -90,9 +90,7 @@ fs.readFile('./page.html', (err, pageTemplate) => {
 		const server = http.createServer();
 		server.on('request', (request, response) => {
 			if (request.url.endsWith('.wav')) {
-console.log('req: ', request.url);
 				fs.readFile(FilePath + path.basename(request.url), (wErr, wFile) => {
-console.log('readfile: ', wFile, wErr);
 					if (wErr) return logMsg(wErr);
 					else {
 						response.writeHead(200, {'Content-Type': 'audio/wave'});
