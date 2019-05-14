@@ -49,30 +49,31 @@
 			const stt = $('statusTxt');
 			msg = JSON.parse(event.data);
 			if (typeof msg === 'string') msg = JSON.parse(msg);   // prevent "over-stringified" string data
-			if (msg.isRecording) {
-				st.innerText = '[Recording]';
-				st.className = 'redFont';
-				stt.innerText = msg.recStats + msg.recStatus;   // *** TO DO: parse recStatus text and format it nicer
-				bt.innerHTML = 'Stop';
-				bt.style.backgroundColor = 'DarkRed';
-			} else {
-				st.innerText = '[Stopped]';
-				st.className = 'blueFont';
-				stt.innerText = '';
-				bt.innerHTML = 'Record';
-				bt.style.backgroundColor = 'ForestGreen';
-			}
-			if (msg.files) {
-				const tbl = $('filesTable');
-				tbl.innerHTML = '';
-				for (let i = 0; i < msg.files.length; i++) {
-					tbl.innerHTML += `<tr><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td onclick="getDetails('${msg.files[i]}')"><pre id="${msg.files[i]}"></pre></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
-					$(msg.files[i]).innerHTML = fileDetails[msg.files[i]] || '[load detail]';					
-				}
-			}
 			if (msg.fileDetail) {
 				fileDetails[msg.fileDetail.fileName] = msg.fileDetail.data;
 				$(msg.fileDetail.fileName).innerHTML = msg.fileDetail.data;
+			} else {
+				if (msg.isRecording) {
+					st.innerText = '[Recording]';
+					st.className = 'redFont';
+					stt.innerText = msg.recStats + msg.recStatus;   // *** TO DO: parse recStatus text and format it nicer
+					bt.innerHTML = 'Stop';
+					bt.style.backgroundColor = 'DarkRed';
+				} else {
+					st.innerText = '[Stopped]';
+					st.className = 'blueFont';
+					stt.innerText = '';
+					bt.innerHTML = 'Record';
+					bt.style.backgroundColor = 'ForestGreen';
+				}
+				if (msg.files) {
+					const tbl = $('filesTable');
+					tbl.innerHTML = '';
+					for (let i = 0; i < msg.files.length; i++) {
+						tbl.innerHTML += `<tr><td><a href="${msg.files[i]}" download>${msg.files[i]}</a></td><td onclick="getDetails('${msg.files[i]}')"><pre id="${msg.files[i]}"></pre></td><td class="redFont" onclick="delFile('${msg.files[i]}')">[Delete]</td></tr>`;
+						$(msg.files[i]).innerHTML = fileDetails[msg.files[i]] || '[load detail]';					
+					}
+				}
 			}
 		}
 		function startStopBtnClick() {
