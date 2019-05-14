@@ -72,7 +72,7 @@
 			if (msg.isRecording) { if (confirm('Stop Recording?')) skt.send('stopRecording'); }
 			else skt.send($('numChannels').value);  // to start recording, just send the number of channels to record on
 		}
-		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send(fileName); }
+		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send('DELETE:' + fileName); }
 		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('shutdown'); }
 		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('reboot'); }
 		skt.onopen = event => {
