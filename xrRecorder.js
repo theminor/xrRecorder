@@ -9,7 +9,7 @@ const WebSocket = require('ws');
 const FilePath = '/recordings/';
 const ServerPort = 3000;
 const AudioDevice = 'hw:X18XR18,0';
-const RecOptions = ['-b', '24'];
+const RecOptions = ['-b', '32'];
 // const RecOptions = ['--buffer', '262144', '-b', '16', '-e', 'signed-integer', '-r', '44100']
 
 // Globals:
