@@ -52,7 +52,10 @@ function wsMsg(ws, msg) {
 	if (msg.startRecording) {
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error'); else {
 			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T','_');   // cheap trick one-liner to take ISO time and convert to Eastern time zone and format output as 2019-05-07_15:23:12
-			proc = childProcess.spawn('rec', ['-S', '-c', msg.startRecording.audioDevice.numChannels, '--buffer', Buffer, '-b', Bitrate, '-r', SampleRate, FilePath + fName + '.wav'], {env: {'AUDIODEV': msg.startRecording.audioDevice}});
+			if (msg.startRecording.audioDevice.numChannels === 'mp3')
+				proc = childProcess.spawn('rec', ['-S', '-c', '2', '-C', '256', '--buffer', Buffer, FilePath + fName + '.mp3'], {env: {'AUDIODEV': msg.startRecording.audioDevice}});
+			else
+				proc = childProcess.spawn('rec', ['-S', '-c', msg.startRecording.audioDevice.numChannels, '--buffer', Buffer, '-b', Bitrate, '-r', SampleRate, FilePath + fName + '.wav'], {env: {'AUDIODEV': msg.startRecording.audioDevice}});
 			proc.recStatus = '';
 			proc.recStats = '';
 			proc.stderr.on('data', dta => {
