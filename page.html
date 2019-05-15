@@ -113,15 +113,10 @@
 		<h3><pre id="status">[Stopped]</pre></h3>
 		<pre id="statusTxt"></pre>
 		<button id="startStopBtn" onclick="startStopBtnClick()">Record</button>
-		<label for="numChannels">Channels: </label><select id="numChannels"></select>
-		<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; $('numChannels').value = 18; }</script>
+		<label for="numChannels">Channels (or single mp3 file): </label><select id="numChannels"></select>
+		<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; } $('numChannels').innerHTML += `<option value="mp3">mp3</option>`; $('numChannels').value = 18;</script>
 		<label for="audioDevice">Audio Device: </label>
 		<select id="audioDevice" onload="getRecDevs()"></select>
-			<!--
-			<option value="hw:X18XR18,0">X Air XR18 Digital Mixer</option>
-			<option value="hw:U192k,0">UMC404HD Audio Interface</option>
-			<option value="hw:CODEC,0">QX1222USB Analog Mixer</option>
-			-->
 	</div>
 	<h2>Files:</h2>
 	<div>
