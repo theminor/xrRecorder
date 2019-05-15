@@ -49,42 +49,42 @@ function wsSend(ws, dta) {
  * @param {String} [msg] - the websocket message in the form: {"cmd": "command", "data": "data", "oldTitle": "Old Title", ...}
  */
 function wsMsg(ws, msg) {
-	if (Number(msg)) {   // if a number was sent, that is the number of channels and our instruction to start recording. Note no recording if msg === 0
+	if (msg.startRecording) {
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error'); else {
 			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T','_');   // cheap trick one-liner to take ISO time and convert to Eastern time zone and format output as 2019-05-07_15:23:12
-			proc = childProcess.spawn('rec', ['-S', '-c', msg, '--buffer', Buffer, '-b', Bitrate, '-r', SampleRate, FilePath + fName + '.wav'], {env: {'AUDIODEV': AudioDevice}});
+			proc = childProcess.spawn('rec', ['-S', '-c', msg.startRecording.audioDevice.numChannels, '--buffer', Buffer, '-b', Bitrate, '-r', SampleRate, FilePath + fName + '.wav'], {env: {'AUDIODEV': msg.startRecording.audioDevice}});
 			proc.recStatus = '';
 			proc.recStats = '';
 			proc.stderr.on('data', dta => {
-				let msg = dta.toString();
-				if (msg.startsWith('\rIn:')) proc.recStatus = dta.toString();   // \n is console code to remove last line of the string
-				else proc.recStats += msg;
+				let otp = dta.toString();
+				if (otp.startsWith('\rIn:')) proc.recStatus = dta.toString();   // \n is console code to remove last line of the string
+				else proc.recStats += otp;
 			});
-			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); wsMsg(ws, 'getStatus'); });
-			proc.on('exit', code => { proc.exitCode = code; wsMsg(ws, 'getStatus'); });
+			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); wsMsg(ws, {getStatus: true}); });
+			proc.on('exit', code => { proc.exitCode = code; wsMsg(ws, {getStatus: true}); });
 		}
-	} else if (msg === 'stopRecording') {
+	} else if (msg.stopRecording) {
 		if (proc.kill) proc.kill(); else logMsg('Unable to stop recording: probably no recording is in progress', 'error');
-	} else if (msg === 'getStatus') {
+	} else if (msg.getStatus) {
 		fs.readdir(FilePath, function(err, ls) {
 			if (err) logMsg(err);
 			wsSend(ws, JSON.stringify({isRecording: (typeof proc.exitCode === 'number') ? false : true, files: ls, recStats: proc.recStats, recStatus: proc.recStatus}));
 		});
-	} else if (msg === 'shutdown') {
+	} else if (msg.shutdown) {
 		childProcess.exec('sudo /sbin/shutdown -h now', sErr => sErr ? logMsg(cOut) : null);
-	} else if (msg === 'reboot') {
+	} else if (msg.reboot) {
 		childProcess.exec('sudo /sbin/shutdown -r now', sErr => sErr ? logMsg(cOut) : null);		
-	} else if (msg.startsWith('DELETE:')) {
-		fs.unlink(FilePath + msg.substring(7), err => {
-			if (err) logMsg(`Unable to delete file "${msg.substring(7)}"`, 'error');
+	} else if (msg.deleteFile) {
+		fs.unlink(FilePath + msg.deleteFile, delErr => {
+			if (delErr) logMsg(delErr);
 		});
-	} else {  // anything else is assumed to be just a file name - get stats on a given file using soxi
-		childProcess.exec('/usr/bin/soxi ' + FilePath + msg, (sErr, sStOut) => {
+	} else if (msg.getDetails) {
+		childProcess.exec('/usr/bin/soxi ' + FilePath + msg.getDetails, (sErr, sStOut) => {
 			if (sErr) logMsg(sErr);
-			wsSend(ws, JSON.stringify({fileDetail: {fileName: msg, data: sStOut}}));
+			wsSend(ws, JSON.stringify({fileDetail: {fileName: msg.getDetails, data: sStOut}}));
 		});
 	}
-	if (msg !== 'getStatus') wsMsg(ws, 'getStatus');
+	if (!msg.getStatus) wsMsg(ws, {getStatus: true});
 }
 
 /**
@@ -119,7 +119,7 @@ fs.readFile('./page.html', (err, pageTemplate) => {
 						return ws.terminate();
 					}
 					ws.isAlive = true;
-					ws.on('message', msg => wsMsg(ws, msg));
+					ws.on('message', msg => wsMsg(ws, JSON.parse(msg)));
 					ws.on('pong', () => ws.isAlive = true);
 					ws.pingTimer = setInterval(() => {
 						if (ws.isAlive === false) return closeWs(ws);
