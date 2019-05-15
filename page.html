@@ -47,7 +47,7 @@
 		function getStatus() { skt.send('{"getStatus":true}'); }
 		function startStopBtnClick() {
 			if (msg.isRecording) { if (confirm('Stop Recording?')) skt.send('{"stopRecording":true}'); }
-			else skt.send(`{"startRecording":{"numChannels":"${$('numChannels').value}","audioDevice":"${$('audioDevice').value}"}}`     )             ;
+			else skt.send(`{"startRecording":{"numChannels":"${$('numChannels').value}","bitrate":"${$('bitrateInp').value}","samplerate":"${$('sampleRateInp').value}","buffer$('bufferInp').value}","audioDevice":"${$('audioDevice').value}"}}`);
 		}
 		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send(`{"deleteFile":"${fileName}"}`); }
 		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('{"shutdown":true}'); }
@@ -115,8 +115,10 @@
 		<button id="startStopBtn" onclick="startStopBtnClick()">Record</button>
 		<label for="numChannels">Channels (or single mp3 file): </label><select id="numChannels"></select>
 		<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; } $('numChannels').innerHTML += `<option value="mp3">mp3</option>`; $('numChannels').value = 18;</script>
-		<label for="audioDevice">Audio Device: </label>
-		<select id="audioDevice" onload="getRecDevs()"></select>
+		<label for="bitrateInp">Bitrate (per sample): </label><input type="number" id="bitrateInp" value="24">
+		<label for="sampleRateInp">Sample Rate: </label><input type="number" id="sampleRateInp" value="48000">
+		<label for="bufferInp">Buffer Size: </label><input type="number" id="bufferInp" value="262144">
+		<label for="audioDevice">Audio Device: </label><select id="audioDevice" onload="getRecDevs()"></select>
 	</div>
 	<h2>Files:</h2>
 	<div>
