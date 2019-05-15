@@ -84,7 +84,7 @@ function wsMsg(ws, msg) {
 			wsSend(ws, JSON.stringify({fileDetail: {fileName: msg.getDetails, data: sStOut}}));
 		});
 	} else if (msg.getRecDevices) {
-		childProcess.exec('arecord -l', (gErr, stOut, stErr) => {
+		childProcess.exec('arecord -l', (gErr, stOut, stErr) => {   // alternatively, consider using "cat /proc/asound/cards"
 			if (gErr) logMsg(gErr);
 			wsSend(ws, JSON.stringify({recDevices: stOut}));		
 		}
