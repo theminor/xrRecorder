@@ -8,7 +8,7 @@ const WebSocket = require('ws');
 // Settings:
 const FilePath = '/recordings/';
 const ServerPort = 80;
-const AudioDevice = 'hw:X18XR18,0';
+// const AudioDevice = 'hw:X18XR18,0';
 const Bitrate = 24;
 const SampleRate = 48000;
 const Buffer = 262144;
@@ -46,7 +46,7 @@ function wsSend(ws, dta) {
 /**
  * Handle incoming data on the given websocket
  * @param {Object} [ws] - the websocket to send response messages on
- * @param {String} [msg] - the websocket message in the form: {"cmd": "command", "data": "data", "oldTitle": "Old Title", ...}
+ * @param {Object} [msg] - the websocket message as an Object NOT as a String
  */
 function wsMsg(ws, msg) {
 	if (msg.startRecording) {
