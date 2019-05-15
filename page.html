@@ -53,6 +53,7 @@
 		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('{"shutdown":true}'); }
 		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('{"reboot":true}'); }
 		function getDetails(fileName) { skt.send(`{"getDetails":"${fileName}"}`); }
+		function getRecDevs() { skt.send('{"getRecDevices":true}'); }
 		
 		skt.onmessage = function(event) {
 			const st = $('status');
@@ -63,6 +64,18 @@
 			if (msg.fileDetail) {
 				fileDetails[msg.fileDetail.fileName] = msg.fileDetail.data;
 				$(msg.fileDetail.fileName).innerHTML = msg.fileDetail.data;
+			} else if (msg.recDevices) {
+				const arecordRegEx = /card (\d+): ([^ ]+) \[([^\]]+)\]/g;
+				const lines = str.split('\n');
+				let devSel = $('audioDevice');
+				let devs = [];
+				devSel.innerHTML = '';
+				for (i = 0; i < lines.length; i++) {
+					let match = regex.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
+					devSel.innerHTML += `<option value="hw:${match[2]},0">${match[3]}</option>`;
+					if (match) devs.push(match);
+				}
+				devSel.selectedIndex = devSel.length - 1;
 			} else {
 				if (msg.isRecording) {
 					st.innerText = '[Recording]';
@@ -103,12 +116,12 @@
 		<label for="numChannels">Channels: </label><select id="numChannels"></select>
 		<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; $('numChannels').value = 18; }</script>
 		<label for="audioDevice">Audio Device: </label>
-		<select id="audioDevice">
+		<select id="audioDevice" onload="getRecDevs()"></select>
+			<!--
 			<option value="hw:X18XR18,0">X Air XR18 Digital Mixer</option>
 			<option value="hw:U192k,0">UMC404HD Audio Interface</option>
 			<option value="hw:CODEC,0">QX1222USB Analog Mixer</option>
-			<!-- *** TO DO : generate this list for the user (?) -->
-		</select>
+			-->
 	</div>
 	<h2>Files:</h2>
 	<div>
