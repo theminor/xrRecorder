@@ -104,10 +104,10 @@
 		<script>for (let i = 1; i <= 18; i++) {	$('numChannels').innerHTML += `<option value=${i}>${i}</option>`; $('numChannels').value = 18; }</script>
 		<label for="audioDevice">Audio Device: </label>
 		<select id="audioDevice">
-			<option>X Air XR18 Digital Mixer</option>
-			<option>UMC404HD Audio Interface</option>
-			<option>QX1222USB Analog Mixer</option>
-			<!-- *** TO DO *** -->
+			<option value="hw:X18XR18,0">X Air XR18 Digital Mixer</option>
+			<option value="hw:U192k,0">UMC404HD Audio Interface</option>
+			<option value="hw:CODEC,0">QX1222USB Analog Mixer</option>
+			<!-- *** TO DO : generate this list for the user (?) -->
 		</select>
 	</div>
 	<h2>Files:</h2>
