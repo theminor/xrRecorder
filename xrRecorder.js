@@ -83,6 +83,11 @@ function wsMsg(ws, msg) {
 			if (sErr) logMsg(sErr);
 			wsSend(ws, JSON.stringify({fileDetail: {fileName: msg.getDetails, data: sStOut}}));
 		});
+	} else if (msg.getRecDevices) {
+		childProcess.exec('arecord -l', (gErr, stOut, stErr) => {
+			if (gErr) logMsg(gErr);
+			wsSend(ws, JSON.stringify({recDevices: stOut}));		
+		}
 	}
 	if (!msg.getStatus) wsMsg(ws, {getStatus: true});
 }
