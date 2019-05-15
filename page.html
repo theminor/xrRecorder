@@ -42,8 +42,18 @@
 		const skt = new WebSocket(window.location.href.replace('http://', 'ws://').replace('https://', 'wss://'));
 		let msg = {};
 		let fileDetails = {};
+		
 		function $(sel) { return document.getElementById(sel); }
-		function getStatus() { skt.send('getStatus'); }
+		function getStatus() { skt.send('{"getStatus":true}'); }
+		function startStopBtnClick() {
+			if (msg.isRecording) { if (confirm('Stop Recording?')) skt.send('{"stopRecording":true}'); }
+			else skt.send(`{"startRecording":{"numChannels":"${$('numChannels').value}","audioDevice":"${$('audioDevice').value}"}}`     )             ;
+		}
+		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send(`{"deleteFile":"${fileName}"}`); }
+		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('{"shutdown":true}'); }
+		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('{"reboot":true}'); }
+		function getDetails(fileName) { skt.send(`{"getDetails":"${fileName}"}`); }
+		
 		skt.onmessage = function(event) {
 			const st = $('status');
 			const bt = $('startStopBtn');
@@ -77,19 +87,11 @@
 				}
 			}
 		}
-		function startStopBtnClick() {
-			if (msg.isRecording) { if (confirm('Stop Recording?')) skt.send('stopRecording'); }
-			else skt.send($('numChannels').value);  // to start recording, just send the number of channels to record on
-		}
-		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send('DELETE:' + fileName); }
-		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('shutdown'); }
-		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('reboot'); }
-		function getDetails(fileName) { skt.send(fileName); }
-		skt.onopen = event => {
+		skt.onopen = evnt => {
 			getStatus();
 			skt.statusTimer = setInterval(getStatus, 5000);
 		}
-		skt.onclose = event => clearInterval(skt.statusTimer);
+		skt.onclose = evnt => clearInterval(skt.statusTimer);
 	</script>
 </head>
 <body class="blueFont">
