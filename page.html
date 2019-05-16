@@ -67,7 +67,7 @@
 				$(msg.fileDetail.fileName).innerHTML = msg.fileDetail.data;
 			} else if (msg.recDevices) {
 				const arecordRegEx = /card (\d+): ([^ ]+) \[([^\]]+)\]/g;
-				const lines = str.split('\n');
+				const lines = msg.recDevices.split('\n');
 				let devSel = $('audioDevice');
 				let devs = [];
 				devSel.innerHTML = '';
