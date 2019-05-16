@@ -49,11 +49,8 @@ function wsMsg(ws, msg) {
 		if (typeof proc.exitCode !== 'number') logMsg('Tried to spawn a new recording, but already recording', 'error'); else {
 			let fName = new Date(new Date() - 14400000).toISOString().slice(0,19).replace('T','_');   // cheap trick one-liner to take ISO time and convert to Eastern time zone and format output as 2019-05-07_15:23:12
 console.log(msg.startRecording.audioDevice.numChannels);
-			if (msg.startRecording.audioDevice.numChannels === 'mp3')
-			{
+			if (msg.startRecording.numChannels === 'mp3')
 				proc = childProcess.spawn('rec', ['-S', '-c', '2', '-C', '256', '--buffer', msg.startRecording.buffer, FilePath + fName + '.mp3'], {env: {'AUDIODEV': msg.startRecording.audioDevice}});
-console.log(proc);
-			}
 			else
 				proc = childProcess.spawn('rec', ['-S', '-c', msg.startRecording.numChannels, '--buffer', msg.startRecording.buffer, '-b', msg.startRecording.bitrate, '-r', msg.startRecording.samplerate, FilePath + fName + '.wav'], {env: {'AUDIODEV': msg.startRecording.audioDevice}});
 			proc.recStatus = '';
@@ -63,7 +60,6 @@ console.log(proc);
 				if (otp.startsWith('\rIn:')) proc.recStatus = dta.toString();   // \n is console code to remove last line of the string
 				else proc.recStats += otp;
 			});
-proc.stdout.on('data', dta => {console.log(dta)});
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); wsMsg(ws, {getStatus: true}); });
 			proc.on('exit', code => { proc.exitCode = code; wsMsg(ws, {getStatus: true}); });
 		}
