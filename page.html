@@ -72,7 +72,7 @@
 				let devs = [];
 				devSel.innerHTML = '';
 				for (i = 0; i < lines.length; i++) {
-					let match = regex.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
+					let match = arecordRegEx.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
 					devSel.innerHTML += `<option value="hw:${match[2]},0">${match[3]}</option>`;
 					if (match) devs.push(match);
 				}
