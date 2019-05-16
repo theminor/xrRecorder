@@ -71,10 +71,14 @@
 				let devSel = $('audioDevice');
 				let devs = [];
 				devSel.innerHTML = '';
+console.log(msg.recDevices);
 				for (i = 0; i < lines.length; i++) {
 					let match = arecordRegEx.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
-					devSel.innerHTML += `<option value="hw:${match[2]},0">${match[3]}</option>`;
-					if (match) devs.push(match);
+console.log(match);
+					if (match) {
+						devs.push(match);
+						devSel.innerHTML += `<option value="hw:${match[2]},0">${match[3]}</option>`;
+					}
 				}
 				devSel.selectedIndex = devSel.length - 1;
 			} else {
