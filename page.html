@@ -110,6 +110,7 @@ console.log(match);
 			skt.statusTimer = setInterval(getStatus, 5000);
 		}
 		skt.onclose = evnt => clearInterval(skt.statusTimer);
+		window.onload=getRecDevs;
 	</script>
 </head>
 <body class="blueFont">
@@ -123,7 +124,7 @@ console.log(match);
 		<label for="bitrateInp">Bitrate (per sample): </label><input type="number" id="bitrateInp" value="24">
 		<label for="sampleRateInp">Sample Rate: </label><input type="number" id="sampleRateInp" value="48000">
 		<label for="bufferInp">Buffer Size: </label><input type="number" id="bufferInp" value="262144">
-		<label for="audioDevice">Audio Device: </label><select id="audioDevice" onload="getRecDevs()"></select>
+		<label for="audioDevice">Audio Device: </label><select id="audioDevice"></select>
 	</div>
 	<h2>Files:</h2>
 	<div>
