@@ -59,7 +59,7 @@ function wsMsg(ws, msg) {
 				if (otp.startsWith('\rIn:')) proc.recStatus = dta.toString();   // \n is console code to remove last line of the string
 				else proc.recStats += otp;
 			});
-stdio.on('data', dta => {console.log(dta)});
+proc.stdout.on('data', dta => {console.log(dta)});
 			proc.on('error', err => { if (proc.kill) proc.kill(); logMsg(err); wsMsg(ws, {getStatus: true}); });
 			proc.on('exit', code => { proc.exitCode = code; wsMsg(ws, {getStatus: true}); });
 		}
