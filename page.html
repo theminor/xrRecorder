@@ -18,10 +18,6 @@
 		td { padding-right: 12px; }
 		pre { font-size: 10px; }
 		label { display: block; }
-		#status {
-			font-family: "Courier New", Courier, monospace;
-			font-size: 20px;
-		}
 		#statusTable {
 			font-size: 14px;
 			padding-bottom: 20px;
@@ -57,7 +53,6 @@
 		function getRecDevs() { skt.send('{"getRecDevices":true}'); }
 		
 		skt.onmessage = function(event) {
-			const st = $('status');
 			const bt = $('startStopBtn');
 			const stt = $('statusTxt');
 			msg = JSON.parse(event.data);
@@ -71,10 +66,8 @@
 				let devSel = $('audioDevice');
 				let devs = [];
 				devSel.innerHTML = '';
-console.log(msg.recDevices);
 				for (i = 0; i < lines.length; i++) {
 					let match = arecordRegEx.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
-console.log(match);
 					if (match) {
 						devs.push(match);
 						devSel.innerHTML += `<option value="hw:${match[2]},0">${match[3]}</option>`;
@@ -83,14 +76,10 @@ console.log(match);
 				devSel.selectedIndex = devSel.length - 1;
 			} else {
 				if (msg.isRecording) {
-					st.innerText = '[Recording]';
-					st.className = 'redFont';
 					stt.innerText = msg.recStats + msg.recStatus;   // *** TO DO: parse recStatus text and format it nicer
 					bt.innerHTML = 'Stop';
 					bt.style.backgroundColor = 'DarkRed';
 				} else {
-					st.innerText = '[Stopped]';
-					st.className = 'blueFont';
 					stt.innerText = '';
 					bt.innerHTML = 'Record';
 					bt.style.backgroundColor = 'ForestGreen';
@@ -116,7 +105,6 @@ console.log(match);
 <body class="blueFont">
 	<h1>xr18</h1>
 	<div>
-		<h3><pre id="status">[Stopped]</pre></h3>
 		<pre id="statusTxt"></pre>
 		<button id="startStopBtn" onclick="startStopBtnClick()">Record</button>
 		<label for="numChannels">Channels (or single mp3 file): </label><select id="numChannels"></select>
