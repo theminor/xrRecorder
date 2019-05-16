@@ -86,7 +86,7 @@ function wsMsg(ws, msg) {
 		childProcess.exec('arecord -l', (gErr, stOut, stErr) => {   // alternatively, consider using "cat /proc/asound/cards"
 			if (gErr) logMsg(gErr);
 			wsSend(ws, JSON.stringify({recDevices: stOut}));		
-		}
+		});
 	}
 	if (!msg.getStatus) wsMsg(ws, {getStatus: true});
 }
