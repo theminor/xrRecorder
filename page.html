@@ -64,17 +64,10 @@
 				fileDetails[msg.fileDetail.fileName] = msg.fileDetail.data;
 				$(msg.fileDetail.fileName).innerHTML = msg.fileDetail.data;
 			} else if (msg.recDevices) {
-				const arecordRegEx = /card (\d+): ([^ ]+) \[([^\]]+)\]/g;
-				const lines = msg.recDevices.split('\n');
-				let devSel = $('audioDevice');
-				let devs = [];
+				const devSel = $('audioDevice');
 				devSel.innerHTML = '';
 				for (i = 0; i < lines.length; i++) {
-					let match = arecordRegEx.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
-					if (match) {
-						devs.push(match);
-						devSel.innerHTML += `<option value="hw:${match[2]},0">${match[3]}</option>`;
-					}
+					devSel.innerHTML += `<option value="hw:${msg.recDevices[i].hwName},0">${msg.recDevices[i].name}</option>`;
 				}
 				devSel.selectedIndex = devSel.length - 1;
 			} else {
