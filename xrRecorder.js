@@ -86,6 +86,14 @@ console.log(msg.startRecording.audioDevice.numChannels);
 	} else if (msg.getRecDevices) {
 		childProcess.exec('arecord -l', (gErr, stOut, stErr) => {   // alternatively, consider using "cat /proc/asound/cards"
 			if (gErr) logMsg(gErr);
+			const arecordRegEx = /card (\d+): ([^ ]+) \[([^\]]+)\]/g;
+			const lines = stOut.split('\n');
+			let devs = [];
+			for (i = 0; i < lines.length; i++) {
+				let match = arecordRegEx.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
+				// if (match) devs.push(match);
+				if (match) devs.push({fullInfo: match[0], cardNum: match[1], hwName: match[2], name: match[3]});
+			}
 			wsSend(ws, JSON.stringify({recDevices: stOut}));		
 		});
 	}
