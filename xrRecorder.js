@@ -94,7 +94,7 @@ console.log(msg.startRecording.audioDevice.numChannels);
 				// if (match) devs.push(match);
 				if (match) devs.push({fullInfo: match[0], cardNum: match[1], hwName: match[2], name: match[3]});
 			}
-			wsSend(ws, JSON.stringify({recDevices: stOut}));		
+			wsSend(ws, JSON.stringify({recDevices: devs}));		
 		});
 	}
 	if (!msg.getStatus) wsMsg(ws, {getStatus: true});
