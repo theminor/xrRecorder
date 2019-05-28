@@ -66,9 +66,11 @@ console.log(msg.startRecording.audioDevice.numChannels);
 	} else if (msg.stopRecording) {
 		if (proc.kill) proc.kill(); else logMsg('Unable to stop recording: probably no recording is in progress', 'error');
 	} else if (msg.getStatus) {
+		wsSend(ws, JSON.stringify({isRecording: (typeof proc.exitCode === 'number') ? false : true, recStats: proc.recStats, recStatus: proc.recStatus}));
+	} else if (msg.getFileList) {
 		fs.readdir(FilePath, function(err, ls) {
 			if (err) logMsg(err);
-			wsSend(ws, JSON.stringify({isRecording: (typeof proc.exitCode === 'number') ? false : true, files: ls, recStats: proc.recStats, recStatus: proc.recStatus}));
+			wsSend(ws, JSON.stringify({files: ls}));
 		});
 	} else if (msg.shutdown) {
 		childProcess.exec('sudo /sbin/shutdown -h now', sErr => sErr ? logMsg(cOut) : null);
