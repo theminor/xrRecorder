@@ -44,16 +44,18 @@
 		let fileDetails = {};
 		
 		function $(sel) { return document.getElementById(sel); }
+		function getFileList() { skt.send('{"getFileList":true}'); }
 		function getStatus() { skt.send('{"getStatus":true}'); }
 		function startStopBtnClick() {
 			if (msg.isRecording) { if (confirm('Stop Recording?')) skt.send('{"stopRecording":true}'); }
 			else skt.send(`{"startRecording":{"numChannels":"${$('numChannels').value}","bitrate":"${$('bitrateInp').value}","samplerate":"${$('sampleRateInp').value}","buffer":"${$('bufferInp').value}","audioDevice":"${$('audioDevice').value}"}}`);
+			getFileList();
 		}
-		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send(`{"deleteFile":"${fileName}"}`); }
+		function delFile(fileName) { if (confirm(`Delete the file ${fileName}?`)) skt.send(`{"deleteFile":"${fileName}"}`); getFileList(); }
 		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('{"shutdown":true}'); }
 		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('{"reboot":true}'); }
 		function getDetails(fileName) { skt.send(`{"getDetails":"${fileName}"}`); }
-		function getRecDevs() { skt.send('{"getRecDevices":true}'); }
+		function getRecDevs() { skt.send('{"getRecDevices":true}'); getFileList(); }
 		
 		skt.onmessage = function(event) {
 			const bt = $('startStopBtn');
