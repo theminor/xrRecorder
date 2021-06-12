@@ -4,4 +4,3 @@ It also offers some file management and other trivial, but useful tasks.
 
 ## To Do:
 - [ ] Add ability to playback files such as house music over USB
-- [ ] 
