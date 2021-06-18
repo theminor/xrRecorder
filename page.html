@@ -68,7 +68,7 @@
 			} else if (msg.recDevices) {
 				const devSel = $('audioDevice');
 				devSel.innerHTML = '';
-				for (i = 0; i < lines.length; i++) {
+				for (let i = 0; i < lines.length; i++) {
 					devSel.innerHTML += `<option value="hw:${msg.recDevices[i].hwName},0">${msg.recDevices[i].name}</option>`;
 				}
 				devSel.selectedIndex = devSel.length - 1;

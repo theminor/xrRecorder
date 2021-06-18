@@ -7,7 +7,7 @@ const WebSocket = require('ws');
 
 // Settings:
 const FilePath = '/recordings/';
-const ServerPort = 80;
+const ServerPort = 12380;
 
 // Globals:
 let proc = {exitCode: -1};
@@ -91,7 +91,7 @@ console.log(msg.startRecording.audioDevice.numChannels);
 			const arecordRegEx = /card (\d+): ([^ ]+) \[([^\]]+)\]/g;
 			const lines = stOut.split('\n');
 			let devs = [];
-			for (i = 0; i < lines.length; i++) {
+			for (let i = 0; i < lines.length; i++) {
 				let match = arecordRegEx.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
 				// if (match) devs.push(match);
 				if (match) devs.push({fullInfo: match[0], cardNum: match[1], hwName: match[2], name: match[3]});
