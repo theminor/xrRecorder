@@ -38,7 +38,7 @@
 		.redFont { color: DarkRed; }
 		.blueFont { color: DarkBlue; }
 	</style>
-	<script>
+	<script defer>
 		const skt = new WebSocket(window.location.href.replace('http://', 'ws://').replace('https://', 'wss://'));
 		let msg = {};
 		let fileDetails = {};
@@ -55,7 +55,10 @@
 		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('{"shutdown":true}'); }
 		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('{"reboot":true}'); }
 		function getDetails(fileName) { skt.send(`{"getDetails":"${fileName}"}`); }
-		function getRecDevs() { skt.send('{"getRecDevices":true}'); getFileList(); }
+		function getRecDevs() { 
+			skt.send('{"getRecDevices":true}');
+			getFileList();
+		}
 		
 		skt.onmessage = function(event) {
 			const bt = $('startStopBtn');
@@ -93,11 +96,12 @@
 			}
 		}
 		skt.onopen = evnt => {
+			getRecDevs();
 			getStatus();
 			skt.statusTimer = setInterval(getStatus, 5000);
 		}
 		skt.onclose = evnt => clearInterval(skt.statusTimer);
-		window.onload=getRecDevs;
+		// window.onload=getRecDevs;
 	</script>
 </head>
 <body class="blueFont">
