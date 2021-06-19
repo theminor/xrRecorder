@@ -55,10 +55,7 @@
 		function shutdownBtnClick() { if (confirm('Shutdown the system?')) skt.send('{"shutdown":true}'); }
 		function restartBtnClick() { if (confirm('Reboot the system?')) skt.send('{"reboot":true}'); }
 		function getDetails(fileName) { skt.send(`{"getDetails":"${fileName}"}`); }
-		function getRecDevs() { 
-			skt.send('{"getRecDevices":true}');
-			getFileList();
-		}
+		function getRecDevs() { skt.send('{"getRecDevices":true}'); getFileList(); }
 		
 		skt.onmessage = function(event) {
 			const bt = $('startStopBtn');
