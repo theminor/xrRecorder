@@ -93,7 +93,6 @@ console.log(msg.startRecording.audioDevice.numChannels);
 			let devs = [];
 			for (let i = 0; i < lines.length; i++) {
 				let match = arecordRegEx.exec(lines[i]);   // matches formatted like: ["card 2: X18XR18 [X18/XR18]", "2", "X18XR18", "X18/XR18"]
-				// if (match) devs.push(match);
 				if (match) devs.push({fullInfo: match[0], cardNum: match[1], hwName: match[2], name: match[3]});
 			}
 			wsSend(ws, JSON.stringify({recDevices: devs}));		
